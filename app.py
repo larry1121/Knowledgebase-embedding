@@ -20,7 +20,7 @@ db = FAISS.from_documents(documents, embeddings)
 
 
 def retrieve_info(query):
-    similar_response = db.similarity_search(query, k=3)
+    similar_response = db.similarity_search(query, k=7)
 
     page_contents_array = [doc.page_content for doc in similar_response]
 
@@ -52,7 +52,7 @@ Please follow these instructions:
 Return only the final decision (O or X), the probability, and your short reasoning.
 
 Example format:
-Decision: O Probability: 85% Reasoning: "This task is very similar to past campaign tasks that received O due to well-defined goals..."
+Decision: O (85%) Reasoning: "This task is very similar to past campaign tasks that received O due to well-defined goals..."
 Now, please produce your final O or X decision based on the new task and the historical records, answer in KOREAN:
 
 """
@@ -74,8 +74,8 @@ def generate_response(message):
 
 # 5. Build an app with streamlit
 def main():
-    st.set_page_config(page_title="OX Decision Generator", page_icon=":bird:")
-    st.header("OX Decision Generator :bird:")
+    st.set_page_config(page_title="OX Decision Helper", page_icon=":bird:")
+    st.header("OX Decision Helper :bird:")
 
     message = st.text_area("Paste the new task details here...")
 
