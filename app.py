@@ -1,16 +1,16 @@
 import streamlit as st
-from langchain.document_loaders.csv_loader import CSVLoader
-from langchain.vectorstores import FAISS
-from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain_community.document_loaders import CSVLoader
+from langchain_community.vectorstores import FAISS
+from langchain_openai.embeddings import OpenAIEmbeddings
+from langchain_openai.chat_models import ChatOpenAI
 from langchain.prompts import PromptTemplate
-from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # 1. Vectorise the sales response csv data
-loader = CSVLoader(file_path="sales_response.csv")
+loader = CSVLoader(file_path="tasks.csv")
 documents = loader.load()
 
 embeddings = OpenAIEmbeddings()
@@ -24,32 +24,37 @@ def retrieve_info(query):
 
     page_contents_array = [doc.page_content for doc in similar_response]
 
-    # print(page_contents_array)
+    print(page_contents_array)
 
     return page_contents_array
 
 
 # 3. Setup LLMChain & prompts
-llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-16k-0613")
+llm = ChatOpenAI(temperature=0, model="gpt-4o-2024-08-06")
 
 template = """
-You are a world class business development representative. 
-I will share a prospect's message with you and you will give me the best answer that 
-I should send to this prospect based on past best practies, 
-and you will follow ALL of the rules below:
+You are a highly knowledgeable Task Reviewer in the OX Human Resource Platform.
 
-1/ Response should be very similar or even identical to the past best practies, 
-in terms of length, ton of voice, logical arguments and other details
-
-2/ If the best practice are irrelevant, then try to mimic the style of the best practice to prospect's message
-
-Below is a message I received from the prospect:
+Below is a new task that needs an O or X decision:
 {message}
 
-Here is a list of best practies of how we normally respond to prospect in similar scenarios:
+We also have a historical record of tasks that were decided O or X, which might be relevant to this new task:
 {best_practice}
 
-Please write the best response that I should send to this prospect:
+Please follow these instructions:
+
+1. Carefully analyze the new task details, including all context such as task name, assignees, priorities, and evaluation criteria.
+2. Compare the new task to any relevant historical tasks found in the database (represented by best_practice). Identify patterns or precedents.
+3. Determine whether this new task is more likely to be approved (O) or rejected (X).
+4. Provide a numerical probability of how likely it is to be approved based on the historical data (for example, “There is a 75% chance this task will receive O”).
+5. Give a concise explanation/rationale for your decision, referencing any similar tasks from the historical records.
+
+Return only the final decision (O or X), the probability, and your short reasoning.
+
+Example format:
+Decision: O Probability: 85% Reasoning: "This task is very similar to past campaign tasks that received O due to well-defined goals..."
+Now, please produce your final O or X decision based on the new task and the historical records, answer in KOREAN:
+
 """
 
 prompt = PromptTemplate(
@@ -69,17 +74,14 @@ def generate_response(message):
 
 # 5. Build an app with streamlit
 def main():
-    st.set_page_config(
-        page_title="Customer response generator", page_icon=":bird:")
+    st.set_page_config(page_title="OX Decision Generator", page_icon=":bird:")
+    st.header("OX Decision Generator :bird:")
 
-    st.header("Customer response generator :bird:")
-    message = st.text_area("customer message")
+    message = st.text_area("Paste the new task details here...")
 
     if message:
-        st.write("Generating best practice message...")
-
+        st.write("Generating O/X decision based on historical tasks...")
         result = generate_response(message)
-
         st.info(result)
 
 

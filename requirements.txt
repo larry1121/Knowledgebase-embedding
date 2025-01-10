@@ -1,7 +1,31 @@
+# requirements.txt
+
+# FastAPI 전체 기능 포함 (web server, CLI, etc.)
 fastapi[all]
+
+# OpenAI 공식 라이브러리
 openai
+
+# .env 환경변수 로딩
 python-dotenv
-pydantic==1.*
+
+# Pydantic 2.x 계열 (FastAPI 0.103.x에서 2.x 호환)
+pydantic
+
+# LangChain 주 패키지
 langchain
+
+# CSVLoader, FAISS 등이 분리된 커뮤니티 패키지
+langchain-community
+
+# ChatOpenAI, OpenAIEmbeddings 등이 분리된 패키지
+langchain-openai
+
+# CPU용 FAISS (Vector DB)
 faiss-cpu
+
+# 토큰화 (OpenAI API, etc.)
 tiktoken
+
+# 웹앱 빌드
+streamlit
