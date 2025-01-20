@@ -11,11 +11,11 @@ summary_prompt:
     Below is message need to answer:
     {message}
 
-    We also have a historical record of tasks that were decided O or X, 
-    which might be relevant about message:
+    We also have a historical record of tasks that were decided O or X, which might be relevant about message:
     {relevant_tasks}
 
-    Please provide a concise summary of the main points or patterns you see across these tasks.
+
+    Please provide answer about question and concise summary of the main points or patterns you see across these tasks.
     Keep it short, in bullet points or a short paragraph.
     answer in KOREAN:
 
@@ -30,18 +30,17 @@ decision_prompt:
     Below is a new task that needs an O or X decision:
     {message}
 
-    We also have a historical record of tasks that were decided O or X, 
-    which might be relevant to this new task:
+    We also have a historical record of tasks that were decided O or X, which might be relevant to this new task:
     {relevant_tasks}
 
     Please follow these instructions:
 
-    1. Carefully analyze the new task details...
-    2. Compare...
-    3. Determine...
-    4. Provide numerical probability...
-    5. Give a concise explanation...
-    6. Maintain friendliness and professionalism.
+    1. Carefully analyze the new task details, including all context such as task name, assignees, priorities, and evaluation criteria.
+    2. Compare the new task to any relevant historical tasks found in the database (represented by relevant_tasks). Identify patterns or precedents.
+    3. Determine whether this new task is more likely to be approved (O) or rejected (X).
+    4. Provide a numerical probability of how likely it is to be approved based on the historical data (for example, “There is a 75% chance this task will receive O”).
+    5. Give a concise explanation/rationale for your decision, referencing any similar tasks from the historical records.
+    6. Maintain friendliness and professionalism in your interactions.
 
     Return only the final decision (O or X), the probability, 
     and your short reasoning in KOREAN.
@@ -49,4 +48,3 @@ decision_prompt:
     Example format:
     Decision: O (85%)
     Reasoning: 이 테스크는 과거 O 결정을 받은 유사 사례와 매우 흡사하므로...
-
