@@ -29,3 +29,7 @@ tiktoken
 
 # 웹앱 빌드
 streamlit
+
+pyyaml
+
+pinecone
